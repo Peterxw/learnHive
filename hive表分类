@@ -1,0 +1,23 @@
+建表语法：
+create [external] table [if not exist] table_name
+[(col_name data_type [COMMENT col_comment], ...)]
+[COMMENT table_comment]
+[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)]
+[CLUSTERED BY (col_name,col_name, ...)
+[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS]
+[ROW_FORMAT row_format]
+[SORTED AS file_format]
+[LOCATION hdfs_path]
+
+1.内部表 （managed table）
+  又称为管理表，删除表时，元数据信息和数据同时被删除
+2.外部表 （external tabel）
+  hdfs上的表的文件，并非存储在默认的路径上的时候，外部表和内部表删除区别，外部表只删除metastore中的元数据信息，不删除数据
+  可以称为外部表，便于和其他数据库和程序交互
+3.分区表 （partition table）
+  分区表不适用直接拷贝数据文件到hdfs，需要load data inpath...并指定分区。分区字段是虚拟字段
+  总的来说partition就是辅助查询，缩小查询范围，加快数据的检索速度和对数据按照一定的规格和条件进行管理
+4.分桶表 （bucket table）
+  分区字段不是表中已存在的字段，分桶字段是表中已存在字段。bucket走的mr程序
+5.临时表 temporary
+  在当前回话内，这张表有效，当回话结束，可以理解为程序结束，则程序终止
